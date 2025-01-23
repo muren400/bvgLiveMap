@@ -8,34 +8,43 @@ export class LiveMap {
         this.api = new BvgApi();
         this.stops = new BvgStops();
         this.lastTripStops = new Map();
+        this.visitedStations = new Map();
 
         this.initControlls();
     }
 
     async updateStops(line) {
-        this.api.getTrips(line).then((trips) => {
+        this.api.getTrips(true, true).then((trips) => {
             for(let stop of this.stops.getStops().values()) {
-                const stopSymbol = this.getStopSymbol(stop.id);
-                if(stopSymbol == null || stopSymbol.classList.contains(line) === false) {
-                    continue;
-                }
-
                 this.setStopVisited(stop.id, false);
             }
 
             for(let trip of trips) {
+                if(line != null && trip.line.name !== line.toUpperCase()) {
+                    continue;
+                }
+
+                if(trip.currentLocation == null) {
+                    continue;
+                }
+
                 const stop = this.stops.findStopByCoords(trip.currentLocation);
                 if(stop == null) {
                     console.log('not at stop');
                     const lastStopId = this.lastTripStops.get(trip.id);
                     if(lastStopId != null) {
-                        this.setStopVisited(lastStopId, true);
+                        this.setStopVisited(lastStopId, false, true);
                     }
 
                     continue;
                 }
 
                 const stopSymbol = this.getStopSymbol(stop.id);
+                if(stopSymbol == null) {
+                    console.log('stop not on map');
+                    continue;
+                }
+
                 if(stopSymbol.classList.contains(trip.line.name) === false) {
                     console.log('stop not for line');
                     continue;
@@ -48,7 +57,7 @@ export class LiveMap {
         });
     }
 
-    setStopVisited(stopId, visited) {
+    setStopVisited(stopId, visited, left) {
         const stopSymbol = this.getStopSymbol(stopId);
         if (stopSymbol == null) {
             console.warn('Station not found: ' + stopId);
@@ -57,8 +66,11 @@ export class LiveMap {
 
         if(visited === true) {
             stopSymbol.classList.add('visited');
+        } else if(left === true && stopSymbol.classList.contains(visited) === false) {
+            stopSymbol.classList.add('left');
         } else {
             stopSymbol.classList.remove('visited');
+            stopSymbol.classList.remove('left');
         }
         
     }

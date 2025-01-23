@@ -82,6 +82,12 @@
 			stroke-width: 2 !important;
 		}
 
+		#stations .station.left {
+			fill: #56591a !important;
+			stroke: #56591a !important;
+			stroke-width: 2 !important;
+		}
+
 		</style>
 	<defs>
 		<g id="label-S1">
