@@ -5,7 +5,7 @@ export default class BvgApi {
 
     getTrips(suburban, subway) {
         return new Promise((resolve) => {
-            const url = 'https://v6.bvg.transport.rest/trips?suburban=' + suburban + '&subway=' + subway;
+            const url = 'https://v6.bvg.transport.rest/trips?suburban=' + suburban + '&subway=' + subway + '&tram=false&bus=false&ferry=false&express=false&regional=false';
             this.makeApiCall(url).then((json) => resolve(json.trips));
         });
     }
