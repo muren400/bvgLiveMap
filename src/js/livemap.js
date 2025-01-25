@@ -28,30 +28,16 @@ export class LiveMap {
                     continue;
                 }
 
-                const stop = this.stops.findStopByCoords(trip.currentLocation);
+                const stop = this.stops.findNearestStop(trip.line.name, trip.currentLocation);
                 if(stop == null) {
-                    console.log('not at stop');
-                    const lastStopId = this.lastTripStops.get(trip.id);
-                    if(lastStopId != null) {
-                        this.setStopVisited(lastStopId, false, true);
-                    }
-
                     continue;
                 }
 
-                const stopSymbol = this.getStopSymbol(stop.id);
-                if(stopSymbol == null) {
-                    console.log('stop not on map');
-                    continue;
-                }
+                const distance = this.stops.getDistanceInM(trip.currentLocation.latitude, trip.currentLocation.longitude, stop.lat, stop.lon);
+                const tripAtStop = distance < 200;
 
-                if(stopSymbol.classList.contains(trip.line.name) === false) {
-                    console.log('stop not for line');
-                    continue;
-                }
-
-                console.log(stop.name);
-                this.setStopVisited(stop.id, true);
+                console.debug(stop.name);
+                this.setStopVisited(stop.id, tripAtStop, !tripAtStop);
                 this.lastTripStops.set(trip.id, stop.id);
             }
         });
@@ -60,7 +46,7 @@ export class LiveMap {
     setStopVisited(stopId, visited, left) {
         const stopSymbol = this.getStopSymbol(stopId);
         if (stopSymbol == null) {
-            console.warn('Station not found: ' + stopId);
+            console.debug('Station not found: ' + stopId);
             return;
         }
 
