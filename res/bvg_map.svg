@@ -88,6 +88,66 @@
 			stroke-width: 2 !important;
 		}
 
+		<!-- #stations .station.inProximity10 {
+			fill: #fffad9 !important;
+			stroke: #fffad9 !important;
+			stroke-width: 2 !important;
+		}
+
+		#stations .station.inProximity20 {
+			fill: #fcf4bd !important;
+			stroke: #fcf4bd !important;
+			stroke-width: 2 !important;
+		}
+
+		#stations .station.inProximity30 {
+			fill: #fcf09f !important;
+			stroke: #fcf09f !important;
+			stroke-width: 2 !important;
+		}
+
+		#stations .station.inProximity40 {
+			fill: #fcee8d !important;
+			stroke: #fcee8d !important;
+			stroke-width: 2 !important;
+		} -->
+
+		#stations .station.inProximity50 {
+			fill: #f5e476 !important;
+			stroke: #fffad9 !important;
+			stroke-width: 2 !important;
+		}
+
+		#stations .station.inProximity60 {
+			fill: #f5e05b !important;
+			stroke: #fcf09f !important;
+			stroke-width: 2 !important;
+		}
+
+		#stations .station.inProximity70 {
+			fill: #f7e045 !important;
+			stroke: #f5e476 !important;
+			stroke-width: 2 !important;
+		}
+
+		#stations .station.inProximity80 {
+			fill: #f2d830 !important;
+			stroke: #f7e045 !important;
+			stroke-width: 2 !important;
+		}
+
+		#stations .station.inProximity90 {
+			fill: #f5d81d !important;
+			stroke: #f5d81d !important;
+			stroke-width: 2 !important;
+		}
+
+		#stations .station.inProximity100 {
+			fill: #f5d402 !important;
+			stroke: #00ff00 !important;
+			stroke-width: 2 !important;
+		}
+
 		</style>
 	<defs>
 		<g id="label-S1">

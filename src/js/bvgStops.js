@@ -368,9 +368,8 @@ export default class BvgStops {
         return null;
     }
 
-    findNearestStop(line, location) {
-        let distance = Number.MAX_SAFE_INTEGER;
-        let foundStop = null;
+    findNearestStops(line, location, size = 2) {
+        let nearestStops = [];
 
         for (let stop of stops.values()) {
             if(stop.lines.includes(line) === false) {
@@ -378,15 +377,39 @@ export default class BvgStops {
             }
 
             const currentDistance = this.getDistance(location.latitude, location.longitude, stop.lat, stop.lon);
-            if (currentDistance >= distance) {
+
+            let inserted = false;
+
+            for(let i=0; i<nearestStops.length; i++) {
+                const currentItem = nearestStops[i];
+                if(currentItem.distance > currentDistance) {
+                    nearestStops.splice(i, 0, {
+                        stop: stop,
+                        distance: currentDistance,
+                    });
+
+                    if(nearestStops.length > size) {
+                        nearestStops.pop();
+                    }
+
+                    inserted = true;
+                    break;
+                }
+            }
+
+            if(inserted == true) {
                 continue;
             }
 
-            distance = currentDistance;
-            foundStop = stop;
+            if(nearestStops.length < size) {
+                nearestStops.push({
+                    stop: stop,
+                    distance: currentDistance,
+                });
+            }
         }
 
-        return foundStop;
+        return nearestStops;
     }
 
     getStops() {
