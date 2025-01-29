@@ -11,38 +11,64 @@ export class LiveMap {
         this.visitedStations = new Map();
 
         this.initControlls();
+        this.initStops();
     }
+
+    initStops() {
+        const group = this.createSvgNode('g', {id: 'stops'}, this.svg.firstChild);
+
+        for(let path of this.svg.getElementsByTagName('path')) {
+            if(path.classList.contains('station') === false) {
+                continue;
+            }
+
+            const attributes = {
+                id: path.id.replace('station-900000', 'stop-900'),
+                d: path.getAttribute('d'),
+                class: 'stop',
+            }
+
+            const stopNode = this.createSvgNode('path', attributes, group);
+        }
+    }
+
+    createSvgNode(name, attributes = {}, parent) {
+        const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+        for (let key in attributes) {
+            node.setAttributeNS(null, key, attributes[key]);
+        }
+
+        parent?.appendChild(node);
+          
+        return node;
+      }
 
     async updateStops(lines) {
         this.api.getTrips(true, true).then((trips) => {
-            for(let stop of this.stops.getStops().values()) {
+            for (let stop of this.stops.getStops().values()) {
                 this.resetStopInProximity(stop.id);
             }
 
-            for(let trip of trips) {
-                if(lines != null && lines.includes(trip.line.name)  === false) {
+            for (let trip of trips) {
+                if (lines != null && lines.includes(trip.line.name) === false) {
                     continue;
                 }
 
-                if(trip.currentLocation == null) {
+                if (trip.currentLocation == null) {
                     continue;
                 }
 
                 const stops = this.stops.findNearestStops(trip.line.name, trip.currentLocation);
 
-                if(stops.length < 2) {
+                if (stops.length < 2) {
                     continue;
                 }
 
                 const distanceBetweenStops = stops[0].distance + stops[1].distance;
 
                 const relativeDistanceToStop1 = (stops[0].distance / distanceBetweenStops) - 0.01;
-                if(relativeDistanceToStop1 > 1) {
+                if (relativeDistanceToStop1 > 1) {
                     relativeDistanceToStop1 = 1;
-                }
-
-                if(stops[0].stop.id === 900078101) {
-                    console.log(relativeDistanceToStop1);
                 }
 
                 this.setStopInProximity(stops[0].stop.id, relativeDistanceToStop1);
@@ -58,7 +84,7 @@ export class LiveMap {
             return;
         }
 
-        for(let i=10; i<=100; i+=10) {
+        for (let i = 10; i <= 100; i += 10) {
             stopSymbol.classList.remove('inProximity' + i);
         }
     }
@@ -74,32 +100,13 @@ export class LiveMap {
         stopSymbol.classList.add('inProximity' + brightness);
     }
 
-    setStopVisited(stopId, visited, left) {
-        const stopSymbol = this.getStopSymbol(stopId);
-        if (stopSymbol == null) {
-            console.debug('Station not found: ' + stopId);
-            return;
-        }
-
-        if(visited === true) {
-            stopSymbol.classList.add('visited');
-        } else if(left === true && stopSymbol.classList.contains(visited) === false) {
-            stopSymbol.classList.add('left');
-        } else {
-            stopSymbol.classList.remove('visited');
-            stopSymbol.classList.remove('left');
-        }
-        
-    }
-
     getStopSymbol(stopId) {
-        const id = ('station-' + stopId).replace('900', '900000')
-        return this.svg.getElementById(id);
+        return this.svg.getElementById('stop-' + stopId);
     }
 
     initControlls() {
         this.svg.addEventListener('wheel', (ev) => {
-            if(ev.ctrlKey === true) {
+            if (ev.ctrlKey === true) {
                 this.zoom(ev.deltaY);
                 ev.preventDefault();
             }

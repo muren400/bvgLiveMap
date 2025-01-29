@@ -75,77 +75,36 @@
 		#stations .station.interchange.U8 {stroke: #000}
 		#lines .line.U9, #stations .station.U9 {stroke: #ff7300}
 		#stations .station.interchange.U9 {stroke: #000}
-		
-		#stations .station.visited {
-			fill: #f9e800 !important;
-			stroke: #f9e800 !important;
-			stroke-width: 2 !important;
+
+		#stops .stop {
+			fill: #ffff00;
+			stroke: #ffff00;
+			opacity: 0;
 		}
 
-		#stations .station.left {
-			fill: #56591a !important;
-			stroke: #56591a !important;
-			stroke-width: 2 !important;
+		#stops .stop.inProximity50 {
+			opacity: 0.1;
 		}
 
-		<!-- #stations .station.inProximity10 {
-			fill: #fffad9 !important;
-			stroke: #fffad9 !important;
-			stroke-width: 2 !important;
+		#stops .stop.inProximity60 {
+			opacity: 0.2;
 		}
 
-		#stations .station.inProximity20 {
-			fill: #fcf4bd !important;
-			stroke: #fcf4bd !important;
-			stroke-width: 2 !important;
+		#stops .stop.inProximity70 {
+			opacity: 0.3;
 		}
 
-		#stations .station.inProximity30 {
-			fill: #fcf09f !important;
-			stroke: #fcf09f !important;
-			stroke-width: 2 !important;
+		#stops .stop.inProximity80 {
+			opacity: 0.5;
 		}
 
-		#stations .station.inProximity40 {
-			fill: #fcee8d !important;
-			stroke: #fcee8d !important;
-			stroke-width: 2 !important;
-		} -->
-
-		#stations .station.inProximity50 {
-			fill: #f5e476 !important;
-			stroke: #fffad9 !important;
-			stroke-width: 2 !important;
+		#stops .stop.inProximity90 {
+			opacity: 0.7;
 		}
 
-		#stations .station.inProximity60 {
-			fill: #f5e05b !important;
-			stroke: #fcf09f !important;
-			stroke-width: 2 !important;
-		}
-
-		#stations .station.inProximity70 {
-			fill: #f7e045 !important;
-			stroke: #f5e476 !important;
-			stroke-width: 2 !important;
-		}
-
-		#stations .station.inProximity80 {
-			fill: #f2d830 !important;
-			stroke: #f7e045 !important;
-			stroke-width: 2 !important;
-		}
-
-		#stations .station.inProximity90 {
-			fill: #f5d81d !important;
-			stroke: #f5d81d !important;
-			stroke-width: 2 !important;
-		}
-
-		#stations .station.inProximity100 {
-			fill: #f5d402 !important;
-			stroke: #00ff00 !important;
-			stroke-width: 2 !important;
+		#stops .stop.inProximity100 {
+			opacity: 1.0;
+			stroke-width: 2;
 		}
 
 		</style>
