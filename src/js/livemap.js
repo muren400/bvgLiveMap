@@ -112,6 +112,10 @@ export class LiveMap {
         const stopSymbol1 = this.getStopSymbol(stops[0].stop.id);
         const stopSymbol2 = this.getStopSymbol(stops[1].stop.id);
 
+        if(stopSymbol1 == null || stopSymbol2 == null) {
+            return;
+        }
+
         const center1 = this.getSymbolCenter(stopSymbol1);
         const center2 = this.getSymbolCenter(stopSymbol2);
 

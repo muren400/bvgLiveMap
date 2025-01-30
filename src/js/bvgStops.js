@@ -190,7 +190,7 @@ const stops = new Map([
     [900057104, { name: "S Julius-Leber-Brücke (Berlin)", lat: 52.486263000000, lon: 13.360775000000, id: 900057104, lines: ["S1"] }],
     [900058101, { name: "S Südkreuz Bhf (Berlin)", lat: 52.475502000000, lon: 13.365552000000, id: 900058101, lines: ["S2", "S25", "S41", "S42", "S45", "S46"] }],
     [900058102, { name: "S Priesterweg (Berlin)", lat: 52.459239000000, lon: 13.356028000000, id: 900058102, lines: ["S2", "S25"] }],
-    [900058103, { name: "S+U Yorckstr. (Berlin)", lat: 52.492358000000, lon: 13.372212000000, id: 900058103, lines: ["S1", "S2", "S25", "U7"] }],
+    [900058103, { name: "S+U Yorckstr. (Berlin)", lat: 52.492358000000, lon: 13.372212000000, id: 900058103, lines: [] }],
     [900057103, { name: "S+U Yorckstr. (Berlin)", lat: 52.492358000000, lon: 13.372212000000, id: 900057103, lines: ["S1", "S2", "S25", "U7"] }],
     [900060101, { name: "S Friedenau (Berlin)", lat: 52.470002000000, lon: 13.340598000000, id: 900060101, lines: ["S1"] }],
     [900061101, { name: "U Walther-Schreiber-Platz (Berlin)", lat: 52.464998000000, lon: 13.328409000000, id: 900061101, lines: ["U9"] }],
