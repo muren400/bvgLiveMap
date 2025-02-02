@@ -16,6 +16,10 @@ if(urlParams.has('showCars')) {
     liveMap.showCars = urlParams.get('showCars').toLocaleLowerCase() === 'true';
 }
 
+if(urlParams.has('showCarLabels')) {
+    liveMap.showCarLabels = urlParams.get('showCarLabels').toLocaleLowerCase() === 'true';
+}
+
 if(urlParams.has('highlightStops')) {
     liveMap.highlightStops = urlParams.get('highlightStops').toLocaleLowerCase() === 'true';
 }

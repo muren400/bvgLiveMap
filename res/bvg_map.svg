@@ -113,6 +113,17 @@
 			stroke-width: .5;
 		}
 
+		.trip-label {
+			fill: #ffffff;
+			stroke: #ffffff00;
+			font-size: 0.1em;
+			stroke-width: .5;
+		}
+
+		.hidden {
+			visibility: hidden;
+		}
+
 		</style>
 	<defs>
 		<g id="label-S1">
