@@ -389,6 +389,14 @@ const stops = new Map([
 ]);
 
 export default class BvgStops {
+    getStopById(id) {
+        if(typeof id !== 'number') {
+            id = parseInt(id);
+        }
+
+        return stops.get(id);
+    }
+
     findStopByCoords(location) {
         for (let stop of stops.values()) {
             if (this._isNearCoord(location.latitude, location.longitude, stop.lat, stop.lon) === true) {

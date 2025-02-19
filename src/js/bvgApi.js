@@ -10,6 +10,13 @@ export default class BvgApi {
         });
     }
 
+    getTrip(id) {
+        return new Promise((resolve) => {
+            const url = 'https://v6.bvg.transport.rest/trips/' + id;
+            this.makeApiCall(url).then((json) => resolve(json.trip));
+        });
+    }
+
     getTripsByLine(line) {
         return new Promise((resolve) => {
             const url = 'https://v6.bvg.transport.rest/trips?lineName=' + line;

@@ -1,4 +1,5 @@
 import BvgApi from "./bvgApi.js";
+import BvgLines from "./bvgLines.js";
 import BvgStops from "./bvgStops.js";
 
 export class LiveMap {
@@ -12,12 +13,58 @@ export class LiveMap {
 
         this.initControlls();
         this.initStops();
+        this.hideLineSegments();
 
         this.tripsG = this.createSvgNode('g', { id: 'trips' }, this.svg.firstChild);
 
-        this.showCars = false;
-        this.showCarLabels = false;
+        this.showCars = true;
+        this.showCarLabels = true;
         this.highlightStops = true;
+    }
+
+    hideLineSegments() {
+        const lineSegments = this.svg.getElementById('lineSegments');
+        lineSegments.classList.add('hidden');
+    }
+
+    initLineSegments() {
+        const bvgLines = new BvgLines();
+
+        const group = this.createSvgNode('g', { id: 'lineSegments' }, this.svg.firstChild);
+
+        for (let line in bvgLines.getLines()) {
+            const lineGroup = this.createSvgNode('g', { id: 'lineSegments_' + line }, group);
+
+            const stopIds = bvgLines.getStopsByLineName(line);
+
+            let lastStopSymbol = null;
+            let lastStopId = null;
+
+            for (let stopId of stopIds) {
+                const stopSymbol = this.getStopSymbol(stopId);
+                if (stopSymbol == null) {
+                    continue;
+                }
+
+                if (lastStopSymbol != null) {
+                    const lastCenter = this.getSymbolCenter(lastStopSymbol);
+                    const nextCenter = this.getSymbolCenter(stopSymbol);
+
+                    const attributes = {
+                        id: lastStopId + '_' + stopId,
+                        d: 'M ' + lastCenter[0] + ' ' + lastCenter[1] + ' L ' + nextCenter[0] + ' ' + nextCenter[1],
+                        class: 'lineSegment',
+                    }
+
+                    this.createSvgNode('path', attributes, lineGroup);
+                }
+
+                lastStopSymbol = stopSymbol;
+                lastStopId = stopId;
+            }
+        }
+
+        debugger;
     }
 
     initStops() {
@@ -150,6 +197,11 @@ export class LiveMap {
     }
 
     calculateCarPosition(stops) {
+        const fromSegment = this.calculateCarPositionFromLineSegment(stops);
+        if(fromSegment != null) {
+            return fromSegment;
+        }
+
         const stopSymbol1 = this.getStopSymbol(stops[0].stop.id);
         const stopSymbol2 = this.getStopSymbol(stops[1].stop.id);
 
@@ -164,6 +216,24 @@ export class LiveMap {
         const relativeDistanceToStop1 = (stops[0].distance / distanceBetweenStops);
 
         return this.interpolate(center1, center2, relativeDistanceToStop1);
+    }
+
+    calculateCarPositionFromLineSegment(stops) {
+        const segment = this.getLineSegment(stops[0].stop.id, stops[1].stop.id);
+        if (segment == null) {
+            return null;
+        }
+
+        const distanceBetweenStops = stops[0].distance + stops[1].distance;
+        let relativeDistanceToStop1 = (stops[0].distance / distanceBetweenStops);
+
+        if (segment.reverse === true) {
+            relativeDistanceToStop1 = 1 - relativeDistanceToStop1;
+        }
+
+        const length = segment.svg.getTotalLength() * relativeDistanceToStop1;
+        const pointAtLength = segment.svg.getPointAtLength(length);
+        return [pointAtLength.x, pointAtLength.y];
     }
 
     updateCarSymbol(oldCarSymbol, trip, tripPosition) {
@@ -226,6 +296,21 @@ export class LiveMap {
 
     getStopSymbol(stopId) {
         return this.svg.getElementById('stop-' + stopId);
+    }
+
+    getLineSegment(stopId1, stopId2) {
+        let reverse = false;
+        let segment = this.svg.getElementById(stopId1 + '_' + stopId2);
+        if (segment == null) {
+            reverse = true;
+            segment = this.svg.getElementById(stopId2 + '_' + stopId1);
+        }
+
+        if (segment == null) {
+            return null;
+        }
+
+        return { svg: segment, reverse: reverse };
     }
 
     initControlls() {
