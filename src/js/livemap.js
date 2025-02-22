@@ -51,7 +51,7 @@ export class LiveMap {
                     const nextCenter = this.getSymbolCenter(stopSymbol);
 
                     const attributes = {
-                        id: lastStopId + '_' + stopId,
+                        id: line + '_' + lastStopId + '_' + stopId,
                         d: 'M ' + lastCenter[0] + ' ' + lastCenter[1] + ' L ' + nextCenter[0] + ' ' + nextCenter[1],
                         class: 'lineSegment',
                     }
@@ -164,7 +164,7 @@ export class LiveMap {
             return;
         }
 
-        const tripPosition = this.calculateCarPosition(stops);
+        const tripPosition = this.calculateCarPosition(trip.line.name, stops);
         if (tripPosition == null) {
             return;
         }
@@ -196,8 +196,8 @@ export class LiveMap {
         }
     }
 
-    calculateCarPosition(stops) {
-        const fromSegment = this.calculateCarPositionFromLineSegment(stops);
+    calculateCarPosition(line, stops) {
+        const fromSegment = this.calculateCarPositionFromLineSegment(line, stops);
         if(fromSegment != null) {
             return fromSegment;
         }
@@ -218,8 +218,8 @@ export class LiveMap {
         return this.interpolate(center1, center2, relativeDistanceToStop1);
     }
 
-    calculateCarPositionFromLineSegment(stops) {
-        const segment = this.getLineSegment(stops[0].stop.id, stops[1].stop.id);
+    calculateCarPositionFromLineSegment(line, stops) {
+        const segment = this.getLineSegment(line, stops[0].stop.id, stops[1].stop.id);
         if (segment == null) {
             return null;
         }
@@ -298,12 +298,12 @@ export class LiveMap {
         return this.svg.getElementById('stop-' + stopId);
     }
 
-    getLineSegment(stopId1, stopId2) {
+    getLineSegment(line, stopId1, stopId2) {
         let reverse = false;
-        let segment = this.svg.getElementById(stopId1 + '_' + stopId2);
+        let segment = this.svg.getElementById(line + '_' + stopId1 + '_' + stopId2);
         if (segment == null) {
             reverse = true;
-            segment = this.svg.getElementById(stopId2 + '_' + stopId1);
+            segment = this.svg.getElementById(line + '_' + stopId2 + '_' + stopId1);
         }
 
         if (segment == null) {
