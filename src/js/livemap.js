@@ -316,14 +316,34 @@ export class LiveMap {
     initControlls() {
         this.svg.addEventListener('wheel', (ev) => {
             if (ev.ctrlKey === true) {
-                this.zoom(ev.deltaY);
+                this.zoom(ev);
                 ev.preventDefault();
             }
         }, { passive: false });
     }
 
-    zoom(delta) {
-        this.map.style.width = (this.map.scrollWidth - delta) + 'px';
-        this.map.style.height = (this.map.scrollHeight - delta) + 'px'
+    zoom(ev) {
+        const zoomRatio = ev.deltaY < 0 ? 1.1 : 0.9;
+
+        const svgNode = this.svg.firstChild;
+
+        const newWidth = parseFloat(svgNode.getAttribute('width')) * zoomRatio;
+        const newHeight = parseFloat(svgNode.getAttribute('height')) * zoomRatio;
+
+        if(newHeight < 100 || newWidth < 100) {
+            return;
+        }
+
+        svgNode.setAttribute('width', newWidth + '%');
+        svgNode.setAttribute('height', newHeight + '%');
+
+        const offsetX = ev.pageX * (zoomRatio - 1);
+        const offsetY = ev.pageY * (zoomRatio - 1);
+
+        svgNode.scrollBy({
+            top: offsetY,
+            left: offsetX,
+            behavior: "instant",
+        });
     }
 }
