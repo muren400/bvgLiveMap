@@ -24,8 +24,12 @@ if(urlParams.has('highlightStops')) {
     liveMap.highlightStops = urlParams.get('highlightStops').toLocaleLowerCase() === 'true';
 }
 
+if(urlParams.has('interval')) {
+    liveMap.interval = parseInt(urlParams.get('interval'), 10);
+}
+
 liveMap.updateStops(lines);
 
 setInterval(() => {
     liveMap.updateStops(lines);
-}, 5000);
+}, liveMap.interval || 5000);
